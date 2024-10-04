@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ChangeEvent, ClipboardEvent, useState } from "react";
+import "./App.css";
+import Summarizing from "./components/summarizing";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [userInput, setUserInput] = useState("");
+  const [showSummarizing, setShowSummarizing] = useState(false);
+  const handleUserInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value: userInput } = e.target;
+    setUserInput(userInput);
+  };
 
+  const handleUserPastedData = (e: ClipboardEvent<HTMLTextAreaElement>) => {
+    const data = e.clipboardData?.getData("text");
+    if (data) {
+      setUserInput(data);
+    }
+  };
+
+  const summarizeText = () => {
+    setShowSummarizing(true);
+  };
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <textarea
+        cols={30}
+        rows={10}
+        onChange={(e) => handleUserInput(e)}
+        onPaste={(e) => handleUserPastedData(e)}
+      />
+      <button onClick={summarizeText}>Summarize</button>
+      {showSummarizing && <Summarizing textToSummarize={userInput} />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

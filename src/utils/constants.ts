@@ -1,0 +1,1 @@
+export const FACEBOOK_BART  = "facebook/bart-large-cnn";
